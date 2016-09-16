@@ -1,0 +1,16 @@
+{
+  "name": "open-json-api",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/open-json-api.js",
+  "scripts": {
+    "test": "teenytest"
+  },
+  "keywords": [],
+  "author": "Michael Schoonmaker <michael.r.schoonmaker@gmail.com> (https://www.schoonology.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "teenytest": "~5.0.0",
+    "testdouble": "~1.4.3"
+  }
+}

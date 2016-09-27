@@ -5,11 +5,13 @@ var SPEC = {
     Widget: {
       properties: {
         attributes: {
-          name: {
-            type: 'string',
-          },
-          price: {
-            type: 'number',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            price: {
+              type: 'number',
+            },
           },
         },
       },

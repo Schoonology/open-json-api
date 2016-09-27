@@ -33,6 +33,16 @@ module.exports = {
 
     assert(subject.properties.relationships && typeof subject.properties.relationships === 'object')
   },
+  'getResourceDefinition fills in properties.attributes.properties, if not specified': function () {
+    var subject = getResourceDefinition(SPEC, 'Empty')
+
+    assert(subject.properties.attributes.properties && typeof subject.properties.attributes.properties === 'object')
+  },
+  'getResourceDefinition fills in properties.relationships.properties, if not specified': function () {
+    var subject = getResourceDefinition(SPEC, 'Empty')
+
+    assert(subject.properties.relationships.properties && typeof subject.properties.relationships.properties === 'object')
+  },
   'getResourceDefinition fills in properties non-destructively, if not specified': function () {
     var subject = getResourceDefinition(SPEC, 'Empty')
 

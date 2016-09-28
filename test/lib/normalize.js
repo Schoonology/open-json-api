@@ -7,6 +7,9 @@ var normalize = require('../../lib/normalize')
 var SPEC = {}
 
 module.exports = {
+  afterAll: function () {
+    td.reset()
+  },
   'normalize': function () {
     var original = { id: 777 }
     var attrs = {}
@@ -19,12 +22,10 @@ module.exports = {
     var subject = normalize(SPEC, 'Widget', original)
 
     assert.deepEqual(subject, {
-      data: {
-        type: 'widgets',
-        id: '777',
-        attributes: attrs,
-        relationships: rels,
-      }
+      type: 'widgets',
+      id: '777',
+      attributes: attrs,
+      relationships: rels,
     })
   },
 }

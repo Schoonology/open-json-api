@@ -5,4 +5,7 @@ module.exports = {
   'oja exports normalize': function () {
     assert.equal(typeof oja.normalize, 'function')
   },
+  'oja exports flatten': function () {
+    assert.equal(typeof oja.flatten, 'function')
+  },
 }

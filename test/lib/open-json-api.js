@@ -8,4 +8,7 @@ module.exports = {
   'oja exports flatten': function () {
     assert.equal(typeof oja.flatten, 'function')
   },
+  'oja exports defineResource': function () {
+    assert.equal(typeof oja.defineResource, 'function')
+  },
 }

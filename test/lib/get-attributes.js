@@ -57,6 +57,29 @@ module.exports = {
       price: Number(widget.price),
     })
   },
+  'getAttributes preserves existing attributes': function () {
+    var widget = {
+      attributes: {
+        name: 'Test Widget',
+        price: 42,
+      },
+    }
+    var subject = getAttributes(SPEC, 'Widget', widget)
+
+    assert.deepEqual(subject, widget.attributes)
+  },
+  'getAttributes prefers existing attributes': function () {
+    var widget = {
+      name: 'Test Widget',
+      price: 23,
+      attributes: {
+        price: 42,
+      },
+    }
+    var subject = getAttributes(SPEC, 'Widget', widget)
+
+    assert.deepEqual(subject, widget.attributes)
+  },
   'getAttributes returns null if data is null': function () {
     var subject = getAttributes(SPEC, 'Widget', null)
 

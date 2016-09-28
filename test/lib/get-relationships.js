@@ -88,6 +88,35 @@ module.exports = {
 
     assert.deepEqual(subject, {})
   },
+  'getRelationships preserves existing relationships': function () {
+    var widget = {
+      relationships: {
+        company: {
+          type: 'companies',
+          id: '42',
+        },
+      },
+    }
+    var subject = getRelationships(SPEC, 'Widget', widget)
+
+    assert.deepEqual(subject, widget.relationships)
+  },
+  'getRelationships prefers existing relationships': function () {
+    var widget = {
+      company: {
+        id: 23,
+      },
+      relationships: {
+        company: {
+          type: 'companies',
+          id: '42',
+        },
+      },
+    }
+    var subject = getRelationships(SPEC, 'Widget', widget)
+
+    assert.deepEqual(subject, widget.relationships)
+  },
   'getRelationships returns null if data is null': function () {
     var subject = getRelationships(SPEC, 'Widget', null)
 

@@ -7,6 +7,14 @@ A library to make authoring [JSON-API][jsonapi]-compliant (v1) endpoints with
 are highly precise, powerful standards, but their verbosity can make it
 difficult to reap their full benefit without headache.
 
+## Installation
+
+OJA can be installed over npm, and should be installed local to a project:
+
+```
+npm install --save-dev open-json-api
+```
+
 ## API
 
 The API snippets below all assume `oja` has been loaded using `require`, like

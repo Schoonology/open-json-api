@@ -28,4 +28,21 @@ module.exports = {
       relationships: rels,
     })
   },
+  'normalize should not require an id': function () {
+    var original = {}
+    var attrs = {}
+    var rels = {}
+
+    td.when(getType(SPEC, 'Widget')).thenReturn('widgets')
+    td.when(getAttributes(SPEC, 'Widget', original)).thenReturn(attrs)
+    td.when(getRelationships(SPEC, 'Widget', original)).thenReturn(rels)
+
+    var subject = normalize(SPEC, 'Widget', original)
+
+    assert.deepEqual(subject, {
+      type: 'widgets',
+      attributes: attrs,
+      relationships: rels,
+    })
+  },
 }

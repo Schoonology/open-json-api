@@ -29,6 +29,18 @@ module.exports = {
       company: { id: '42' },
     })
   },
+  'flatten ignores missing id': function () {
+    var original = generateTestResource()
+
+    delete original.id
+
+    var subject = flatten(original)
+
+    assert.deepEqual(subject, {
+      name: 'Test Widget',
+      company: { id: '42' },
+    })
+  },
   'flatten ignores missing attributes': function () {
     var original = generateTestResource()
 

@@ -1,4 +1,4 @@
-var assert = require('assert')
+var test = require('ava')
 var getType = require('../../lib/get-type')
 var SPEC = {
   definitions: {
@@ -30,45 +30,50 @@ var SPEC = {
   },
 }
 
-module.exports = {
-  'getType returns type in definition with pattern': function () {
-    var subject = getType(SPEC, 'Pattern')
+test('getType returns type in definition with pattern', t => {
+  var subject = getType(SPEC, 'Pattern')
 
-    assert.equal(subject, 'widgets')
-  },
-  'getType returns type in definition with enum': function () {
-    var subject = getType(SPEC, 'Enum')
+  t.is(subject, 'widgets')
+})
 
-    assert.equal(subject, 'widgets')
-  },
-  'getType returns null if type value is missing': function () {
-    var subject = getType(SPEC, 'MissingValue')
+test('getType returns type in definition with enum', t => {
+  var subject = getType(SPEC, 'Enum')
 
-    assert.equal(subject, null)
-  },
-  'getType returns null if type is missing': function () {
-    var subject = getType(SPEC, 'MissingType')
+  t.is(subject, 'widgets')
+})
 
-    assert.equal(subject, null)
-  },
-  'getType throws if spec is null': function () {
-    assert.throws(function () {
-      getType(null, 'Pattern')
-    })
-  },
-  'getType throws if spec is not an object': function () {
-    assert.throws(function () {
-      getType(42)
-    })
-  },
-  'getType throws if spec has no definitions': function () {
-    assert.throws(function () {
-      getType({}, 'Pattern')
-    })
-  },
-  'getType throws if name is not defined': function () {
-    assert.throws(function () {
-      getType(SPEC, 'DoesNotExist')
-    })
-  },
-}
+test('getType returns null if type value is missing', t => {
+  var subject = getType(SPEC, 'MissingValue')
+
+  t.is(subject, null)
+})
+
+test('getType returns null if type is missing', t => {
+  var subject = getType(SPEC, 'MissingType')
+
+  t.is(subject, null)
+})
+
+test('getType throws if spec is null', t => {
+  t.throws(function () {
+    getType(null, 'Pattern')
+  })
+})
+
+test('getType throws if spec is not an object', t => {
+  t.throws(function () {
+    getType(42)
+  })
+})
+
+test('getType throws if spec has no definitions', t => {
+  t.throws(function () {
+    getType({}, 'Pattern')
+  })
+})
+
+test('getType throws if name is not defined', t => {
+  t.throws(function () {
+    getType(SPEC, 'DoesNotExist')
+  })
+})

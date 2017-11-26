@@ -1,127 +1,137 @@
-var assert = require('assert')
+var test = require('ava')
 var defineResource = require('../../lib/define-resource')
 var getAttributes = require('../../lib/get-attributes')
 var getRelationships = require('../../lib/get-relationships')
 var getType = require('../../lib/get-type')
 
-module.exports = {
-  'defineResource returns a new spec': function () {
-    var spec = {}
+test('defineResource returns a new spec', t => {
+  var spec = {}
 
-    var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
 
-    assert.notEqual(spec, subject)
-  },
-  'defineResource adds a definitions block to the spec': function () {
-    var spec = {}
+  t.not(spec, subject)
+})
 
-    var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+test('defineResource adds a definitions block to the spec', t => {
+  var spec = {}
 
-    assert.equal(typeof subject.definitions, 'object')
-  },
-  'defineResource adds the named definition to the spec': function () {
-    var spec = {}
+  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
 
-    var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+  t.is(typeof subject.definitions, 'object')
+})
 
-    assert.equal(typeof subject.definitions.Widget, 'object')
-  },
-  'defineResource adds the named definition non-destructively': function () {
-    var spec = {
-      definitions: {
-        'Existing': {},
+test('defineResource adds the named definition to the spec', t => {
+  var spec = {}
+
+  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+
+  t.is(typeof subject.definitions.Widget, 'object')
+})
+
+test('defineResource adds the named definition non-destructively', t => {
+  var spec = {
+    definitions: {
+      'Existing': {},
+    },
+  }
+
+  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+
+  t.deepEqual(subject.definitions.Existing, spec.definitions.Existing)
+})
+
+test('defineResource adds the specified type to the definition', t => {
+  var spec = {}
+
+  var subject = defineResource(spec, 'Widget', {
+    type: 'widgets',
+  })
+
+  t.is(getType(subject, 'Widget'), 'widgets')
+})
+
+test('defineResource adds an id property to the definition', t => {
+  var spec = {}
+
+  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+
+  // TODO(schoon) - Remove hardcoded path here?
+  t.is(subject.definitions.Widget.properties.id.type, 'string')
+})
+
+test('defineResource adds provided attributes to the definition', t => {
+  var spec = {}
+
+  var subject = defineResource(spec, 'Widget', {
+    type: 'widgets',
+    attributes: {
+      name: {
+        type: 'string',
       },
-    }
+    },
+  })
 
-    var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+  t.deepEqual(
+    getAttributes(subject, 'Widget', { name: 'This is a test.' }),
+    { name: 'This is a test.' }
+  )
+})
 
-    assert.deepEqual(subject.definitions.Existing, spec.definitions.Existing)
-  },
-  'defineResource adds the specified type to the definition': function () {
-    var spec = {}
+test('defineResource adds provided to-one relationships to the definition', t => {
+  var spec = {}
 
-    var subject = defineResource(spec, 'Widget', {
-      type: 'widgets',
-    })
+  var subject = defineResource(spec, 'Company', {
+    type: 'companies'
+  })
+  subject = defineResource(subject, 'Widget', {
+    type: 'widgets',
+    relationships: {
+      company: 'Company',
+    },
+  })
 
-    assert.equal(getType(subject, 'Widget'), 'widgets')
-  },
-  'defineResource adds an id property to the definition': function () {
-    var spec = {}
+  t.deepEqual(
+    getRelationships(subject, 'Widget', { company: { id: 42 } }),
+    { company: { type: 'companies', id: '42' } }
+  )
+})
 
-    var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+test('defineResource adds a named resource identifier to the spec', t => {
+  var spec = {}
 
-    // TODO(schoon) - Remove hardcoded path here?
-    assert.equal(subject.definitions.Widget.properties.id.type, 'string')
-  },
-  'defineResource adds provided attributes to the definition': function () {
-    var spec = {}
+  var subject = defineResource(spec, 'Widget', {
+    type: 'widgets',
+  })
 
-    var subject = defineResource(spec, 'Widget', {
-      type: 'widgets',
-      attributes: {
-        name: {
-          type: 'string',
-        },
-      },
-    })
+  t.is(getType(subject, 'WidgetIdentifier'), 'widgets')
+})
 
-    assert.deepEqual(
-      getAttributes(subject, 'Widget', { name: 'This is a test.' }),
-      { name: 'This is a test.' }
-    )
-  },
-  'defineResource adds provided relationships to the definition': function () {
-    var spec = {}
+test('defineResource throws if no name is specified', t => {
+  t.throws(function () {
+    defineResource({}, null, { type: 'widgets' })
+  })
+})
 
-    var subject = defineResource(spec, 'Company', {
-      type: 'companies'
-    })
-    subject = defineResource(subject, 'Widget', {
-      type: 'widgets',
-      relationships: {
-        company: 'Company',
-      },
-    })
+test('defineResource throws if type is not specified', t => {
+  t.throws(function () {
+    defineResource({}, 'Widget', {})
+  })
+})
 
-    assert.deepEqual(
-      getRelationships(subject, 'Widget', { company: { id: 42 } }),
-      { company: { type: 'companies', id: '42' } }
-    )
-  },
-  'defineResource adds a named resource identifier to the spec': function () {
-    var spec = {}
+test('defineResource adds empty attributes if none specified', t => {
+  var spec = {}
 
-    var subject = defineResource(spec, 'Widget', {
-      type: 'widgets',
-    })
+  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
 
-    assert.equal(getType(subject, 'WidgetIdentifier'), 'widgets')
-  },
-  'defineResource throws if no name is specified': function () {
-    assert.throws(function () {
-      defineResource({}, null, { type: 'widgets' })
-    })
-  },
-  'defineResource throws if type is not specified': function () {
-    assert.throws(function () {
-      defineResource({}, 'Widget', {})
-    })
-  },
-  'defineResource adds empty attributes if none specified': function () {
-    var spec = {}
+  // TODO(schoon) - Remove hardcoded path here?
+  t.is(subject.definitions.Widget.properties.attributes.type, 'object')
+})
 
-    var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+test('defineResource adds empty relationships if none specified', t => {
+  var spec = {}
 
-    // TODO(schoon) - Remove hardcoded path here?
-    assert.equal(subject.definitions.Widget.properties.attributes.type, 'object')
-  },
-  'defineResource adds empty relationships if none specified': function () {
-    var spec = {}
+  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
 
-    var subject = defineResource(spec, 'Widget', { type: 'widgets' })
-
-    // TODO(schoon) - Remove hardcoded path here?
-    assert.equal(subject.definitions.Widget.properties.relationships.type, 'object')
-  },
-}
+  // TODO(schoon) - Remove hardcoded path here?
+  t.is(subject.definitions.Widget.properties.relationships.type, 'object')
+})

@@ -1,48 +1,49 @@
-var assert = require('assert')
+var test = require('ava')
 var td = require('testdouble')
 var getAttributes = td.replace('../../lib/get-attributes')
+var getLinks = td.replace('../../lib/get-links')
 var getRelationships = td.replace('../../lib/get-relationships')
 var getType = td.replace('../../lib/get-type')
 var normalize = require('../../lib/normalize')
 var SPEC = {}
 
-module.exports = {
-  afterAll: function () {
-    td.reset()
-  },
-  'normalize': function () {
-    var original = { id: 777 }
-    var attrs = {}
-    var rels = {}
+test.after(t => {
+  td.reset()
+})
 
-    td.when(getType(SPEC, 'Widget')).thenReturn('widgets')
-    td.when(getAttributes(SPEC, 'Widget', original)).thenReturn(attrs)
-    td.when(getRelationships(SPEC, 'Widget', original)).thenReturn(rels)
+test('normalize', t => {
+  var original = { id: 777 }
+  var attrs = {}
+  var rels = {}
 
-    var subject = normalize(SPEC, 'Widget', original)
+  td.when(getType(SPEC, 'Widget')).thenReturn('widgets')
+  td.when(getAttributes(SPEC, 'Widget', original)).thenReturn(attrs)
+  td.when(getRelationships(SPEC, 'Widget', original)).thenReturn(rels)
 
-    assert.deepEqual(subject, {
-      type: 'widgets',
-      id: '777',
-      attributes: attrs,
-      relationships: rels,
-    })
-  },
-  'normalize should not require an id': function () {
-    var original = {}
-    var attrs = {}
-    var rels = {}
+  var subject = normalize(SPEC, 'Widget', original)
 
-    td.when(getType(SPEC, 'Widget')).thenReturn('widgets')
-    td.when(getAttributes(SPEC, 'Widget', original)).thenReturn(attrs)
-    td.when(getRelationships(SPEC, 'Widget', original)).thenReturn(rels)
+  t.deepEqual(subject, {
+    type: 'widgets',
+    id: '777',
+    attributes: attrs,
+    relationships: rels,
+  })
+})
 
-    var subject = normalize(SPEC, 'Widget', original)
+test('normalize should not require an id', t => {
+  var original = {}
+  var attrs = {}
+  var rels = {}
 
-    assert.deepEqual(subject, {
-      type: 'widgets',
-      attributes: attrs,
-      relationships: rels,
-    })
-  },
-}
+  td.when(getType(SPEC, 'Widget')).thenReturn('widgets')
+  td.when(getAttributes(SPEC, 'Widget', original)).thenReturn(attrs)
+  td.when(getRelationships(SPEC, 'Widget', original)).thenReturn(rels)
+
+  var subject = normalize(SPEC, 'Widget', original)
+
+  t.deepEqual(subject, {
+    type: 'widgets',
+    attributes: attrs,
+    relationships: rels,
+  })
+})

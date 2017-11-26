@@ -1,4 +1,4 @@
-var assert = require('assert')
+var test = require('ava')
 var getResourceDefinition = require('../../lib/get-resource-definition')
 var SPEC = {
   definitions: {
@@ -12,60 +12,68 @@ var SPEC = {
   },
 }
 
-module.exports = {
-  'getResourceDefinition returns the definition': function () {
-    var subject = getResourceDefinition(SPEC, 'Valid')
+test('getResourceDefinition returns the definition', t => {
+  var subject = getResourceDefinition(SPEC, 'Valid')
 
-    assert.equal(subject.properties.test_definition, true)
-  },
-  'getResourceDefinition fills in properties, if not specified': function () {
-    var subject = getResourceDefinition(SPEC, 'Empty')
+  t.is(subject.properties.test_definition, true)
+})
 
-    assert(subject.properties && typeof subject.properties === 'object')
-  },
-  'getResourceDefinition fills in properties.attributes, if not specified': function () {
-    var subject = getResourceDefinition(SPEC, 'Empty')
+test('getResourceDefinition fills in properties, if not specified', t => {
+  var subject = getResourceDefinition(SPEC, 'Empty')
 
-    assert(subject.properties.attributes && typeof subject.properties.attributes === 'object')
-  },
-  'getResourceDefinition fills in properties.relationships, if not specified': function () {
-    var subject = getResourceDefinition(SPEC, 'Empty')
+  t.true(subject.properties && typeof subject.properties === 'object')
+})
 
-    assert(subject.properties.relationships && typeof subject.properties.relationships === 'object')
-  },
-  'getResourceDefinition fills in properties.attributes.properties, if not specified': function () {
-    var subject = getResourceDefinition(SPEC, 'Empty')
+test('getResourceDefinition fills in properties.attributes, if not specified', t => {
+  var subject = getResourceDefinition(SPEC, 'Empty')
 
-    assert(subject.properties.attributes.properties && typeof subject.properties.attributes.properties === 'object')
-  },
-  'getResourceDefinition fills in properties.relationships.properties, if not specified': function () {
-    var subject = getResourceDefinition(SPEC, 'Empty')
+  t.true(subject.properties.attributes && typeof subject.properties.attributes === 'object')
+})
 
-    assert(subject.properties.relationships.properties && typeof subject.properties.relationships.properties === 'object')
-  },
-  'getResourceDefinition fills in properties non-destructively, if not specified': function () {
-    var subject = getResourceDefinition(SPEC, 'Empty')
+test('getResourceDefinition fills in properties.relationships, if not specified', t => {
+  var subject = getResourceDefinition(SPEC, 'Empty')
 
-    assert.equal(SPEC.definitions.Empty.properties, null)
-  },
-  'getResourceDefinition throws if spec is null': function () {
-    assert.throws(function () {
-      getResourceDefinition(null, 'Valid')
-    })
-  },
-  'getResourceDefinition throws if spec is not an object': function () {
-    assert.throws(function () {
-      getResourceDefinition(42)
-    })
-  },
-  'getResourceDefinition throws if spec has no definitions': function () {
-    assert.throws(function () {
-      getResourceDefinition({}, 'Valid')
-    })
-  },
-  'getResourceDefinition throws if name is not defined': function () {
-    assert.throws(function () {
-      getResourceDefinition(SPEC, 'DoesNotExist')
-    })
-  },
-}
+  t.true(subject.properties.relationships && typeof subject.properties.relationships === 'object')
+})
+
+test('getResourceDefinition fills in properties.attributes.properties, if not specified', t => {
+  var subject = getResourceDefinition(SPEC, 'Empty')
+
+  t.true(subject.properties.attributes.properties && typeof subject.properties.attributes.properties === 'object')
+})
+
+test('getResourceDefinition fills in properties.relationships.properties, if not specified', t => {
+  var subject = getResourceDefinition(SPEC, 'Empty')
+
+  t.true(subject.properties.relationships.properties && typeof subject.properties.relationships.properties === 'object')
+})
+
+test('getResourceDefinition fills in properties non-destructively, if not specified', t => {
+  var subject = getResourceDefinition(SPEC, 'Empty')
+
+  t.is(SPEC.definitions.Empty.properties, undefined)
+})
+
+test('getResourceDefinition throws if spec is null', t => {
+  t.throws(function () {
+    getResourceDefinition(null, 'Valid')
+  })
+})
+
+test('getResourceDefinition throws if spec is not an object', t => {
+  t.throws(function () {
+    getResourceDefinition(42)
+  })
+})
+
+test('getResourceDefinition throws if spec has no definitions', t => {
+  t.throws(function () {
+    getResourceDefinition({}, 'Valid')
+  })
+})
+
+test('getResourceDefinition throws if name is not defined', t => {
+  t.throws(function () {
+    getResourceDefinition(SPEC, 'DoesNotExist')
+  })
+})

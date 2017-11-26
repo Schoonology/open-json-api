@@ -4,13 +4,13 @@
   "description": "",
   "main": "lib/open-json-api.js",
   "scripts": {
-    "test": "teenytest"
+    "test": "ava test"
   },
   "keywords": [],
   "author": "Michael Schoonmaker <michael.r.schoonmaker@gmail.com> (https://www.schoonology.com/)",
   "license": "MIT",
   "devDependencies": {
-    "teenytest": "~5.0.2",
+    "ava": "~0.23.0",
     "testdouble": "~3.2.6"
   }
 }

@@ -1,4 +1,4 @@
-var assert = require('assert')
+var test = require('ava')
 var getRelationships = require('../../lib/get-relationships')
 var SPEC = {
   definitions: {
@@ -55,124 +55,134 @@ var SPEC = {
   },
 }
 
-module.exports = {
-  'getRelationships returns defined relationships from data': function () {
-    var widget = {
-      company: {
-        id: 42,
-      },
-    }
-    var subject = getRelationships(SPEC, 'Widget', widget)
+test('getRelationships returns defined relationships from data', t => {
+  var widget = {
+    company: {
+      id: 42,
+    },
+  }
+  var subject = getRelationships(SPEC, 'Widget', widget)
 
-    assert.deepEqual(subject, {
+  t.deepEqual(subject, {
+    company: {
+      type: 'companies',
+      id: '42',
+    },
+  })
+})
+
+test('getRelationships ignores extra attributes in data', t => {
+  var widget = {
+    company: {
+      id: 42,
+    },
+    extra: true
+  }
+  var subject = getRelationships(SPEC, 'Widget', widget)
+
+  t.is(typeof subject.extra, 'undefined')
+})
+
+test('getRelationships ignores missing attributes in data', t => {
+  var widget = {}
+  var subject = getRelationships(SPEC, 'Widget', widget)
+
+  t.deepEqual(subject, {})
+})
+
+test('getRelationships preserves existing relationships', t => {
+  var widget = {
+    relationships: {
       company: {
         type: 'companies',
         id: '42',
       },
-    })
-  },
-  'getRelationships ignores extra attributes in data': function () {
-    var widget = {
+    },
+  }
+  var subject = getRelationships(SPEC, 'Widget', widget)
+
+  t.deepEqual(subject, widget.relationships)
+})
+
+test('getRelationships prefers existing relationships', t => {
+  var widget = {
+    company: {
+      id: 23,
+    },
+    relationships: {
       company: {
-        id: 42,
+        type: 'companies',
+        id: '42',
       },
-      extra: true
-    }
-    var subject = getRelationships(SPEC, 'Widget', widget)
+    },
+  }
+  var subject = getRelationships(SPEC, 'Widget', widget)
 
-    assert.equal(typeof subject.extra, 'undefined')
-  },
-  'getRelationships ignores missing attributes in data': function () {
-    var widget = {}
-    var subject = getRelationships(SPEC, 'Widget', widget)
+  t.deepEqual(subject, widget.relationships)
+})
 
-    assert.deepEqual(subject, {})
-  },
-  'getRelationships preserves existing relationships': function () {
-    var widget = {
-      relationships: {
-        company: {
-          type: 'companies',
-          id: '42',
-        },
-      },
-    }
-    var subject = getRelationships(SPEC, 'Widget', widget)
+test('getRelationships returns null if data is null', t => {
+  var subject = getRelationships(SPEC, 'Widget', null)
 
-    assert.deepEqual(subject, widget.relationships)
-  },
-  'getRelationships prefers existing relationships': function () {
-    var widget = {
-      company: {
-        id: 23,
-      },
-      relationships: {
-        company: {
-          type: 'companies',
-          id: '42',
-        },
-      },
-    }
-    var subject = getRelationships(SPEC, 'Widget', widget)
+  t.is(subject, null)
+})
 
-    assert.deepEqual(subject, widget.relationships)
-  },
-  'getRelationships returns null if data is null': function () {
-    var subject = getRelationships(SPEC, 'Widget', null)
+test('getRelationships throws if spec is null', t => {
+  t.throws(function () {
+    getRelationships(null, 'Widget', {})
+  })
+})
 
-    assert.equal(subject, null)
-  },
-  'getRelationships throws if spec is null': function () {
-    assert.throws(function () {
-      getRelationships(null, 'Widget', {})
-    })
-  },
-  'getRelationships throws if spec is not an object': function () {
-    assert.throws(function () {
-      getRelationships(42, 'Widget', {})
-    })
-  },
-  'getRelationships throws if spec has no definitions': function () {
-    assert.throws(function () {
-      getRelationships({}, 'Widget', {})
-    })
-  },
-  'getRelationships throws if name is not defined': function () {
-    assert.throws(function () {
-      getRelationships(SPEC, 'DoesNotExist', {})
-    })
-  },
-  'getRelationships throws if identifier path is bad': function () {
-    var widget = {
-      company: {
-        id: 42,
-      },
-    }
+test('getRelationships throws if spec is not an object', t => {
+  t.throws(function () {
+    getRelationships(42, 'Widget', {})
+  })
+})
 
-    assert.throws(function () {
-      getRelationships(SPEC, 'BadPath', widget)
-    })
-  },
-  'getRelationships throws if identifier name is bad': function () {
-    var widget = {
-      company: {
-        id: 42,
-      },
-    }
+test('getRelationships throws if spec has no definitions', t => {
+  t.throws(function () {
+    getRelationships({}, 'Widget', {})
+  })
+})
 
-    assert.throws(function () {
-      getRelationships(SPEC, 'BadName', widget)
-    })
-  },
-  'getRelationships throws if identifier reference is missing': function () {
-    var widget = {
-      company: {
-        id: 42,
-      },
-    }
+test('getRelationships throws if name is not defined', t => {
+  t.throws(function () {
+    getRelationships(SPEC, 'DoesNotExist', {})
+  })
+})
 
-    assert.throws(function () {
-      getRelationships(SPEC, 'NoName', widget)
-    })
-  },
-}
+test('getRelationships throws if identifier path is bad', t => {
+  var widget = {
+    company: {
+      id: 42,
+    },
+  }
+
+  t.throws(function () {
+    getRelationships(SPEC, 'BadPath', widget)
+  })
+})
+
+test('getRelationships throws if identifier name is bad', t => {
+  var widget = {
+    company: {
+      id: 42,
+    },
+  }
+
+  t.throws(function () {
+    getRelationships(SPEC, 'BadName', widget)
+  })
+})
+
+test('getRelationships throws if identifier reference is missing', t => {
+  var widget = {
+    company: {
+      id: 42,
+    },
+  }
+
+  t.throws(function () {
+    getRelationships(SPEC, 'NoName', widget)
+  })
+})

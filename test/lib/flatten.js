@@ -1,4 +1,4 @@
-var assert = require('assert')
+var test = require('ava')
 var flatten = require('../../lib/flatten')
 
 function generateTestResource() {
@@ -17,81 +17,86 @@ function generateTestResource() {
   }
 }
 
-module.exports = {
-  'flatten collapses attributes and relationships to top-level fields': function () {
-    var original = generateTestResource()
+test('flatten collapses attributes and relationships to top-level fields', t => {
+  var original = generateTestResource()
 
-    var subject = flatten(original)
+  var subject = flatten(original)
 
-    assert.deepEqual(subject, {
-      id: '777',
-      name: 'Test Widget',
-      company: { id: '42' },
-    })
-  },
-  'flatten ignores missing id': function () {
-    var original = generateTestResource()
+  t.deepEqual(subject, {
+    id: '777',
+    name: 'Test Widget',
+    company: { id: '42' },
+  })
+})
 
-    delete original.id
+test('flatten ignores missing id', t => {
+  var original = generateTestResource()
 
-    var subject = flatten(original)
+  delete original.id
 
-    assert.deepEqual(subject, {
-      name: 'Test Widget',
-      company: { id: '42' },
-    })
-  },
-  'flatten ignores missing attributes': function () {
-    var original = generateTestResource()
+  var subject = flatten(original)
 
-    delete original.attributes
+  t.deepEqual(subject, {
+    name: 'Test Widget',
+    company: { id: '42' },
+  })
+})
 
-    var subject = flatten(original)
+test('flatten ignores missing attributes', t => {
+  var original = generateTestResource()
 
-    assert.deepEqual(subject, {
-      id: '777',
-      company: { id: '42' },
-    })
-  },
-  'flatten ignores missing relationships': function () {
-    var original = generateTestResource()
+  delete original.attributes
 
-    delete original.relationships
+  var subject = flatten(original)
 
-    var subject = flatten(original)
+  t.deepEqual(subject, {
+    id: '777',
+    company: { id: '42' },
+  })
+})
 
-    assert.deepEqual(subject, {
-      id: '777',
-      name: 'Test Widget',
-    })
-  },
-  'flatten ignores invalid relationships': function () {
-    var original = generateTestResource()
+test('flatten ignores missing relationships', t => {
+  var original = generateTestResource()
 
-    delete original.relationships.company.id
+  delete original.relationships
 
-    var subject = flatten(original)
+  var subject = flatten(original)
 
-    assert.deepEqual(subject, {
-      id: '777',
-      name: 'Test Widget',
-    })
-  },
-  'flatten ignores empty objects': function () {
-    var subject = flatten({})
+  t.deepEqual(subject, {
+    id: '777',
+    name: 'Test Widget',
+  })
+})
 
-    assert.deepEqual(subject, {})
-  },
-  'flatten returns null if the data is null': function () {
-    var subject = flatten(null)
+test('flatten ignores invalid relationships', t => {
+  var original = generateTestResource()
 
-    assert.equal(subject, null)
-  },
-  'flatten returns already-flatten objects unharmed': function () {
-    var original = flatten(generateTestResource())
+  delete original.relationships.company.id
 
-    var subject = flatten(original)
+  var subject = flatten(original)
 
-    assert.deepEqual(original, subject)
-  },
-}
+  t.deepEqual(subject, {
+    id: '777',
+    name: 'Test Widget',
+  })
+})
+
+test('flatten ignores empty objects', t => {
+  var subject = flatten({})
+
+  t.deepEqual(subject, {})
+})
+
+test('flatten returns null if the data is null', t => {
+  var subject = flatten(null)
+
+  t.is(subject, null)
+})
+
+test('flatten returns already-flatten objects unharmed', t => {
+  var original = flatten(generateTestResource())
+
+  var subject = flatten(original)
+
+  t.deepEqual(original, subject)
+})

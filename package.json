@@ -10,7 +10,7 @@
   "author": "Michael Schoonmaker <michael.r.schoonmaker@gmail.com> (https://www.schoonology.com/)",
   "license": "MIT",
   "devDependencies": {
-    "teenytest": "~5.0.0",
-    "testdouble": "~1.4.3"
+    "teenytest": "~5.0.2",
+    "testdouble": "~3.2.6"
   }
 }

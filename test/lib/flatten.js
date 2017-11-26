@@ -87,4 +87,11 @@ module.exports = {
 
     assert.equal(subject, null)
   },
+  'flatten returns already-flatten objects unharmed': function () {
+    var original = flatten(generateTestResource())
+
+    var subject = flatten(original)
+
+    assert.deepEqual(original, subject)
+  },
 }

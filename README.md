@@ -90,6 +90,25 @@ should have the same result:
 }                                }
 ```
 
+### `oja.initializeSpec(options)`
+
+Returns a valid top-level Open API specification with the provided `options.title` and `options.version`, if any. If not provided, defaults will be used.
+
+Example:
+
+```
+oja.initializeSpec({ title: 'My Awesome API', version: 'beta' })
+{
+  "swagger": "2.0",
+  "produces": ["application/json"],
+  "info": {
+    "title": "My Awesome API",
+    "version": "beta"
+  },
+  "paths": {}
+}
+```
+
 ### `oja.defineResource(spec, name, options)`
 
 Adds definitions to `spec` suitable for validating and normalizing `name`

@@ -14,7 +14,11 @@ var SPEC = {
         relationships: {
           properties: {
             company: {
-              $ref: '#/definitions/CompanyIdentifier'
+              properties: {
+                data: {
+                  $ref: '#/definitions/CompanyIdentifier'
+                }
+              }
             }
           }
         }
@@ -25,7 +29,11 @@ var SPEC = {
         relationships: {
           properties: {
             company: {
-              $ref: 'wrong/CompanyIdentifier'
+              properties: {
+                data: {
+                  $ref: 'wrong/CompanyIdentifier'
+                }
+              }
             }
           }
         }
@@ -36,7 +44,11 @@ var SPEC = {
         relationships: {
           properties: {
             company: {
-              $ref: '#/definitions/Company'
+              properties: {
+                data: {
+                  $ref: '#/definitions/Company'
+                }
+              }
             }
           }
         }
@@ -47,6 +59,9 @@ var SPEC = {
         relationships: {
           properties: {
             company: {
+              properties: {
+                data: {}
+              }
             }
           }
         }

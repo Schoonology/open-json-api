@@ -28,6 +28,14 @@ test('defineResource adds the named definition to the spec', t => {
   t.is(typeof subject.definitions.Widget, 'object')
 })
 
+test('defineResource adds a named definition for an identifier to the spec', t => {
+  var spec = {}
+
+  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+
+  t.is(typeof subject.definitions.WidgetIdentifier, 'object')
+})
+
 test('defineResource adds the named definition non-destructively', t => {
   var spec = {
     definitions: {
@@ -40,10 +48,16 @@ test('defineResource adds the named definition non-destructively', t => {
   t.deepEqual(subject.definitions.Existing, spec.definitions.Existing)
 })
 
-test('defineResource adds the specified type to the definition', t => {
+test('defineResource does not modify passed-in object', t => {
   var spec = {}
 
-  var subject = defineResource(spec, 'Widget', {
+  defineResource(spec, 'Widget', { type: 'widgets' })
+
+  t.deepEqual(spec, spec)
+})
+
+test('defineResource adds the specified type to the definition', t => {
+  var subject = defineResource({}, 'Widget', {
     type: 'widgets'
   })
 
@@ -51,18 +65,13 @@ test('defineResource adds the specified type to the definition', t => {
 })
 
 test('defineResource adds an id property to the definition', t => {
-  var spec = {}
+  var subject = defineResource({}, 'Widget', { type: 'widgets' })
 
-  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
-
-  // TODO(schoon) - Remove hardcoded path here?
   t.is(subject.definitions.Widget.properties.id.type, 'string')
 })
 
 test('defineResource adds provided attributes to the definition', t => {
-  var spec = {}
-
-  var subject = defineResource(spec, 'Widget', {
+  var subject = defineResource({}, 'Widget', {
     type: 'widgets',
     attributes: {
       name: {
@@ -78,9 +87,7 @@ test('defineResource adds provided attributes to the definition', t => {
 })
 
 test('defineResource adds provided to-one relationships to the definition', t => {
-  var spec = {}
-
-  var subject = defineResource(spec, 'Company', {
+  var subject = defineResource({}, 'Company', {
     type: 'companies'
   })
   subject = defineResource(subject, 'Widget', {
@@ -96,10 +103,25 @@ test('defineResource adds provided to-one relationships to the definition', t =>
   )
 })
 
-test('defineResource adds a named resource identifier to the spec', t => {
-  var spec = {}
+test('defineResource adds provided to-many relationships to the definition', t => {
+  var subject = defineResource({}, 'Part', {
+    type: 'parts'
+  })
+  subject = defineResource(subject, 'Widget', {
+    type: 'widgets',
+    relationships: {
+      contents: ['Part']
+    }
+  })
 
-  var subject = defineResource(spec, 'Widget', {
+  t.deepEqual(
+    getRelationships(subject, 'Widget', { contents: [{ id: 42 }] }),
+    { contents: [{ type: 'parts', id: '42' }] }
+  )
+})
+
+test('defineResource adds a named resource identifier to the spec', t => {
+  var subject = defineResource({}, 'Widget', {
     type: 'widgets'
   })
 
@@ -119,18 +141,13 @@ test('defineResource throws if type is not specified', t => {
 })
 
 test('defineResource adds empty attributes if none specified', t => {
-  var spec = {}
+  var subject = defineResource({}, 'Widget', { type: 'widgets' })
 
-  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
-
-  // TODO(schoon) - Remove hardcoded path here?
   t.is(subject.definitions.Widget.properties.attributes.type, 'object')
 })
 
 test('defineResource adds empty relationships if none specified', t => {
-  var spec = {}
-
-  var subject = defineResource(spec, 'Widget', { type: 'widgets' })
+  var subject = defineResource({}, 'Widget', { type: 'widgets' })
 
   // TODO(schoon) - Remove hardcoded path here?
   t.is(subject.definitions.Widget.properties.relationships.type, 'object')

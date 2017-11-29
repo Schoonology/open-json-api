@@ -24,6 +24,24 @@ var SPEC = {
         }
       }
     },
+    WidgetToMany: {
+      properties: {
+        relationships: {
+          properties: {
+            stores: {
+              properties: {
+                data: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/CompanyIdentifier'
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     BadPath: {
       properties: {
         relationships: {
@@ -199,5 +217,21 @@ test('getRelationships throws if identifier reference is missing', t => {
 
   t.throws(function () {
     getRelationships(SPEC, 'NoName', widget)
+  })
+})
+
+test('getRelationships returns an array when a to-many relationship', t => {
+  var widget = {
+    stores: [{
+      id: 42
+    }]
+  }
+  var subject = getRelationships(SPEC, 'WidgetToMany', widget)
+
+  t.deepEqual(subject, {
+    stores: [{
+      type: 'companies',
+      id: '42'
+    }]
   })
 })

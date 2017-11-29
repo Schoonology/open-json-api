@@ -37,6 +37,11 @@ For example, given the name `Widget` with the following (abbreviated) spec:
     "name": "string",
     "price": "number",
   },
+  "relationships": {
+    "company": {
+      "data": ""
+    }
+  }
 }
 ```
 
@@ -106,6 +111,8 @@ is required:
                         // the finished spec.
       'AnotherExample', // Values should correspond to the "name" you give
                         // other Resources (presumably using defineResource).
+    example_coll:       // When building a one-to-many relationship,
+      ['SubExample'],   // use an Array containing the other "name".
   }
 }
 ```

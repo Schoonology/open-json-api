@@ -1,19 +1,19 @@
 var test = require('ava')
 var flatten = require('../../lib/flatten')
 
-function generateTestResource() {
+function generateTestResource () {
   return {
     type: 'widgets',
     id: '777',
     attributes: {
-      name: 'Test Widget',
+      name: 'Test Widget'
     },
     relationships: {
       company: {
         type: 'companies',
-        id: '42',
-      },
-    },
+        id: '42'
+      }
+    }
   }
 }
 
@@ -25,7 +25,7 @@ test('flatten collapses attributes and relationships to top-level fields', t => 
   t.deepEqual(subject, {
     id: '777',
     name: 'Test Widget',
-    company: { id: '42' },
+    company: { id: '42' }
   })
 })
 
@@ -38,7 +38,7 @@ test('flatten ignores missing id', t => {
 
   t.deepEqual(subject, {
     name: 'Test Widget',
-    company: { id: '42' },
+    company: { id: '42' }
   })
 })
 
@@ -51,7 +51,7 @@ test('flatten ignores missing attributes', t => {
 
   t.deepEqual(subject, {
     id: '777',
-    company: { id: '42' },
+    company: { id: '42' }
   })
 })
 
@@ -64,7 +64,7 @@ test('flatten ignores missing relationships', t => {
 
   t.deepEqual(subject, {
     id: '777',
-    name: 'Test Widget',
+    name: 'Test Widget'
   })
 })
 
@@ -77,7 +77,7 @@ test('flatten ignores invalid relationships', t => {
 
   t.deepEqual(subject, {
     id: '777',
-    name: 'Test Widget',
+    name: 'Test Widget'
   })
 })
 

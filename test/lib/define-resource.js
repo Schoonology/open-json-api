@@ -31,8 +31,8 @@ test('defineResource adds the named definition to the spec', t => {
 test('defineResource adds the named definition non-destructively', t => {
   var spec = {
     definitions: {
-      'Existing': {},
-    },
+      'Existing': {}
+    }
   }
 
   var subject = defineResource(spec, 'Widget', { type: 'widgets' })
@@ -44,7 +44,7 @@ test('defineResource adds the specified type to the definition', t => {
   var spec = {}
 
   var subject = defineResource(spec, 'Widget', {
-    type: 'widgets',
+    type: 'widgets'
   })
 
   t.is(getType(subject, 'Widget'), 'widgets')
@@ -66,9 +66,9 @@ test('defineResource adds provided attributes to the definition', t => {
     type: 'widgets',
     attributes: {
       name: {
-        type: 'string',
-      },
-    },
+        type: 'string'
+      }
+    }
   })
 
   t.deepEqual(
@@ -86,8 +86,8 @@ test('defineResource adds provided to-one relationships to the definition', t =>
   subject = defineResource(subject, 'Widget', {
     type: 'widgets',
     relationships: {
-      company: 'Company',
-    },
+      company: 'Company'
+    }
   })
 
   t.deepEqual(
@@ -100,7 +100,7 @@ test('defineResource adds a named resource identifier to the spec', t => {
   var spec = {}
 
   var subject = defineResource(spec, 'Widget', {
-    type: 'widgets',
+    type: 'widgets'
   })
 
   t.is(getType(subject, 'WidgetIdentifier'), 'widgets')

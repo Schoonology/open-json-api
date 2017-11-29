@@ -4,12 +4,12 @@ var SPEC = {
   definitions: {
     Valid: {
       properties: {
-        test_definition: true,
-      },
+        test_definition: true
+      }
     },
     Empty: {
-    },
-  },
+    }
+  }
 }
 
 test('getResourceDefinition returns the definition', t => {
@@ -49,7 +49,7 @@ test('getResourceDefinition fills in properties.relationships.properties, if not
 })
 
 test('getResourceDefinition fills in properties non-destructively, if not specified', t => {
-  var subject = getResourceDefinition(SPEC, 'Empty')
+  getResourceDefinition(SPEC, 'Empty')
 
   t.is(SPEC.definitions.Empty.properties, undefined)
 })

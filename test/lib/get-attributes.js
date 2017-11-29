@@ -7,22 +7,22 @@ var SPEC = {
         attributes: {
           properties: {
             name: {
-              type: 'string',
+              type: 'string'
             },
             price: {
-              type: 'number',
-            },
-          },
-        },
-      },
-    },
-  },
+              type: 'number'
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 test('getAttributes returns defined attributes from data', t => {
   var widget = {
     name: 'Test Widget',
-    price: 42,
+    price: 42
   }
   var subject = getAttributes(SPEC, 'Widget', widget)
 
@@ -49,14 +49,14 @@ test('getAttributes ignores missing attributes in data', t => {
 
 test('getAttributes casts attributes based on defined type', t => {
   var widget = {
-    name: new Buffer('New Widget'),
-    price: '42.99',
+    name: Buffer.from('New Widget'),
+    price: '42.99'
   }
   var subject = getAttributes(SPEC, 'Widget', widget)
 
   t.deepEqual(subject, {
     name: String(widget.name),
-    price: Number(widget.price),
+    price: Number(widget.price)
   })
 })
 
@@ -64,8 +64,8 @@ test('getAttributes preserves existing attributes', t => {
   var widget = {
     attributes: {
       name: 'Test Widget',
-      price: 42,
-    },
+      price: 42
+    }
   }
   var subject = getAttributes(SPEC, 'Widget', widget)
 
@@ -77,8 +77,8 @@ test('getAttributes prefers existing attributes', t => {
     name: 'Test Widget',
     price: 23,
     attributes: {
-      price: 42,
-    },
+      price: 42
+    }
   }
   var subject = getAttributes(SPEC, 'Widget', widget)
 

@@ -5,76 +5,76 @@ var SPEC = {
     CompanyIdentifier: {
       properties: {
         type: {
-          pattern: 'companies',
-        },
-      },
+          pattern: 'companies'
+        }
+      }
     },
     Widget: {
       properties: {
         relationships: {
           properties: {
             company: {
-              $ref: '#/definitions/CompanyIdentifier',
-            },
-          },
-        },
-      },
+              $ref: '#/definitions/CompanyIdentifier'
+            }
+          }
+        }
+      }
     },
     BadPath: {
       properties: {
         relationships: {
           properties: {
             company: {
-              $ref: 'wrong/CompanyIdentifier',
-            },
-          },
-        },
-      },
+              $ref: 'wrong/CompanyIdentifier'
+            }
+          }
+        }
+      }
     },
     BadName: {
       properties: {
         relationships: {
           properties: {
             company: {
-              $ref: '#/definitions/Company',
-            },
-          },
-        },
-      },
+              $ref: '#/definitions/Company'
+            }
+          }
+        }
+      }
     },
     NoName: {
       properties: {
         relationships: {
           properties: {
             company: {
-            },
-          },
-        },
-      },
-    },
-  },
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 test('getRelationships returns defined relationships from data', t => {
   var widget = {
     company: {
-      id: 42,
-    },
+      id: 42
+    }
   }
   var subject = getRelationships(SPEC, 'Widget', widget)
 
   t.deepEqual(subject, {
     company: {
       type: 'companies',
-      id: '42',
-    },
+      id: '42'
+    }
   })
 })
 
 test('getRelationships ignores extra attributes in data', t => {
   var widget = {
     company: {
-      id: 42,
+      id: 42
     },
     extra: true
   }
@@ -95,9 +95,9 @@ test('getRelationships preserves existing relationships', t => {
     relationships: {
       company: {
         type: 'companies',
-        id: '42',
-      },
-    },
+        id: '42'
+      }
+    }
   }
   var subject = getRelationships(SPEC, 'Widget', widget)
 
@@ -107,14 +107,14 @@ test('getRelationships preserves existing relationships', t => {
 test('getRelationships prefers existing relationships', t => {
   var widget = {
     company: {
-      id: 23,
+      id: 23
     },
     relationships: {
       company: {
         type: 'companies',
-        id: '42',
-      },
-    },
+        id: '42'
+      }
+    }
   }
   var subject = getRelationships(SPEC, 'Widget', widget)
 
@@ -154,8 +154,8 @@ test('getRelationships throws if name is not defined', t => {
 test('getRelationships throws if identifier path is bad', t => {
   var widget = {
     company: {
-      id: 42,
-    },
+      id: 42
+    }
   }
 
   t.throws(function () {
@@ -166,8 +166,8 @@ test('getRelationships throws if identifier path is bad', t => {
 test('getRelationships throws if identifier name is bad', t => {
   var widget = {
     company: {
-      id: 42,
-    },
+      id: 42
+    }
   }
 
   t.throws(function () {
@@ -178,8 +178,8 @@ test('getRelationships throws if identifier name is bad', t => {
 test('getRelationships throws if identifier reference is missing', t => {
   var widget = {
     company: {
-      id: 42,
-    },
+      id: 42
+    }
   }
 
   t.throws(function () {

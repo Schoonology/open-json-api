@@ -19,6 +19,7 @@ test('normalize', t => {
   td.when(getType(SPEC, 'Widget')).thenReturn('widgets')
   td.when(getAttributes(SPEC, 'Widget', original)).thenReturn(attrs)
   td.when(getRelationships(SPEC, 'Widget', original)).thenReturn(rels)
+  td.when(getLinks(SPEC, 'Widget', original)).thenReturn(null)
 
   var subject = normalize(SPEC, 'Widget', original)
 
@@ -26,7 +27,7 @@ test('normalize', t => {
     type: 'widgets',
     id: '777',
     attributes: attrs,
-    relationships: rels,
+    relationships: rels
   })
 })
 
@@ -44,6 +45,6 @@ test('normalize should not require an id', t => {
   t.deepEqual(subject, {
     type: 'widgets',
     attributes: attrs,
-    relationships: rels,
+    relationships: rels
   })
 })

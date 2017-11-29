@@ -6,28 +6,28 @@ var SPEC = {
       properties: {
         type: {
           type: 'string',
-          pattern: 'widgets',
-        },
-      },
+          pattern: 'widgets'
+        }
+      }
     },
     Enum: {
       properties: {
         type: {
           type: 'string',
-          enum: ['widgets'],
-        },
-      },
+          enum: ['widgets']
+        }
+      }
     },
     MissingValue: {
       properties: {
         type: {
-          type: 'string',
-        },
-      },
+          type: 'string'
+        }
+      }
     },
     MissingType: {
-    },
-  },
+    }
+  }
 }
 
 test('getType returns type in definition with pattern', t => {

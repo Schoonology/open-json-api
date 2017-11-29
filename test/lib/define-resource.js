@@ -99,7 +99,7 @@ test('defineResource adds provided to-one relationships to the definition', t =>
 
   t.deepEqual(
     getRelationships(subject, 'Widget', { company: { id: 42 } }),
-    { company: { type: 'companies', id: '42' } }
+    { company: { data: { type: 'companies', id: '42' } } }
   )
 })
 
@@ -116,7 +116,7 @@ test('defineResource adds provided to-many relationships to the definition', t =
 
   t.deepEqual(
     getRelationships(subject, 'Widget', { contents: [{ id: 42 }] }),
-    { contents: [{ type: 'parts', id: '42' }] }
+    { contents: { data: [{ type: 'parts', id: '42' }] } }
   )
 })
 

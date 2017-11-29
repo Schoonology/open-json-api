@@ -98,8 +98,10 @@ test('getRelationships returns defined relationships from data', t => {
 
   t.deepEqual(subject, {
     company: {
-      type: 'companies',
-      id: '42'
+      data: {
+        type: 'companies',
+        id: '42'
+      }
     }
   })
 })
@@ -127,8 +129,10 @@ test('getRelationships preserves existing relationships', t => {
   var widget = {
     relationships: {
       company: {
-        type: 'companies',
-        id: '42'
+        data: {
+          type: 'companies',
+          id: '42'
+        }
       }
     }
   }
@@ -144,8 +148,10 @@ test('getRelationships prefers existing relationships', t => {
     },
     relationships: {
       company: {
-        type: 'companies',
-        id: '42'
+        data: {
+          type: 'companies',
+          id: '42'
+        }
       }
     }
   }
@@ -229,9 +235,11 @@ test('getRelationships returns an array when a to-many relationship', t => {
   var subject = getRelationships(SPEC, 'WidgetToMany', widget)
 
   t.deepEqual(subject, {
-    stores: [{
-      type: 'companies',
-      id: '42'
-    }]
+    stores: {
+      data: [{
+        type: 'companies',
+        id: '42'
+      }]
+    }
   })
 })

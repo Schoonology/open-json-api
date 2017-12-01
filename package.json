@@ -14,5 +14,8 @@
     "ava": "~0.23.0",
     "standard": "~10.0.3",
     "testdouble": "~3.2.6"
+  },
+  "dependencies": {
+    "lodash.defaultsdeep": "~4.6.0"
   }
 }

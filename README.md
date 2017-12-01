@@ -12,7 +12,7 @@ difficult to reap their full benefit without headache.
 OJA can be installed over npm, and should be installed local to a project:
 
 ```
-npm install --save-dev open-json-api
+npm install open-json-api
 ```
 
 ## API
@@ -21,7 +21,7 @@ The API snippets below all assume `oja` has been loaded using `require`, like
 so:
 
 ```
-var oja = require('oja')
+var oja = require('open-json-api')
 ```
 
 ### `oja.normalize(spec, name, obj)`

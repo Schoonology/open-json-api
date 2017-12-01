@@ -19,6 +19,12 @@ test('defineSearchRoute should return an object with a complete 200 response', t
   t.truthy(subject.responses[200].schema.properties.data)
   t.is(subject.responses[200].schema.properties.data.type, 'array')
   t.truthy(subject.responses[200].schema.properties.data.items)
+  t.truthy(subject.responses[200].schema.properties.included)
+  t.is(subject.responses[200].schema.properties.included.type, 'array')
+  t.truthy(subject.responses[200].schema.properties.included.items)
+  t.is(subject.responses[200].schema.properties.included.items.type, 'object')
+  t.truthy(subject.responses[200].schema.properties.meta)
+  t.is(subject.responses[200].schema.properties.meta.type, 'object')
 })
 
 test('defineSearchRoute should include the passed-in options', t => {

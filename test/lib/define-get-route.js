@@ -1,12 +1,12 @@
 var test = require('ava')
-var defineSearchRoute = require('../../lib/define-search-route')
+var defineGetRoute = require('../../lib/define-get-route')
 
-test('defineSearchRoute should require a name', t => {
-  t.throws(() => defineSearchRoute())
+test('defineGetRoute should require a name', t => {
+  t.throws(() => defineGetRoute())
 })
 
-test('defineSearchRoute should return an object with a complete 200 response', t => {
-  var subject = defineSearchRoute('Widget')
+test('defineGetRoute should return an object with a complete 200 response', t => {
+  var subject = defineGetRoute('Widget')
 
   t.truthy(subject.responses)
   t.truthy(subject.responses[200])
@@ -17,9 +17,7 @@ test('defineSearchRoute should return an object with a complete 200 response', t
   t.deepEqual(subject.responses[200].schema.required, ['data'])
   t.truthy(subject.responses[200].schema.properties)
   t.truthy(subject.responses[200].schema.properties.data)
-  t.is(subject.responses[200].schema.properties.data.type, 'array')
-  t.truthy(subject.responses[200].schema.properties.data.items)
-  t.truthy(subject.responses[200].schema.properties.data.items.$ref)
+  t.truthy(subject.responses[200].schema.properties.data.$ref)
   t.truthy(subject.responses[200].schema.properties.included)
   t.is(subject.responses[200].schema.properties.included.type, 'array')
   t.truthy(subject.responses[200].schema.properties.included.items)
@@ -28,14 +26,14 @@ test('defineSearchRoute should return an object with a complete 200 response', t
   t.is(subject.responses[200].schema.properties.meta.type, 'object')
 })
 
-test('defineSearchRoute should include the passed-in options', t => {
-  var subject = defineSearchRoute('Widget', { extra: 'present' })
+test('defineGetRoute should include the passed-in options', t => {
+  var subject = defineGetRoute('Widget', { extra: 'present' })
 
   t.is(subject.extra, 'present')
 })
 
-test('defineSearchRoute should mix in options deeply', t => {
-  var subject = defineSearchRoute('Widget', {
+test('defineGetRoute should mix in options deeply', t => {
+  var subject = defineGetRoute('Widget', {
     responses: {
       200: {
         description: 'New description'
@@ -47,10 +45,10 @@ test('defineSearchRoute should mix in options deeply', t => {
   t.truthy(subject.responses[200].schema)
 })
 
-test('defineSearchRoute should not modify the options object', t => {
+test('defineGetRoute should not modify the options object', t => {
   var options = {}
 
-  defineSearchRoute('Widget', options)
+  defineGetRoute('Widget', options)
 
   t.deepEqual(options, {})
 })

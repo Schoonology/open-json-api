@@ -7,6 +7,7 @@ test('oja exports', t => {
     'defineGetRoute',
     'defineResource',
     'defineSearchRoute',
+    'defineUpdateRoute',
     'flatten',
     'initializeSpec',
     'normalize'

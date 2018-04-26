@@ -92,3 +92,33 @@ test('defineCreateRoute should not override an existing body parameter', t => {
 
   t.deepEqual(subject.parameters, parameters)
 })
+
+test('defineCreateRoute should require the provided attributes', t => {
+  var subject = defineCreateRoute('Widget', {
+    required: {
+      attributes: ['test-property']
+    }
+  })
+
+  // HACK(schoon) - Search instead.
+  var requiredKeys = subject.parameters[0].schema.properties.data.allOf[1]
+  var requiredAttributes = subject.parameters[0].schema.properties.data.allOf[2]
+
+  t.deepEqual(requiredKeys.required, ['type', 'attributes'])
+  t.deepEqual(requiredAttributes.properties.attributes.required, ['test-property'])
+})
+
+test('defineCreateRoute should require the provided relationships', t => {
+  var subject = defineCreateRoute('Widget', {
+    required: {
+      relationships: ['test-property']
+    }
+  })
+
+  // HACK(schoon) - Search instead.
+  var requiredKeys = subject.parameters[0].schema.properties.data.allOf[1]
+  var requiredRelationships = subject.parameters[0].schema.properties.data.allOf[2]
+
+  t.deepEqual(requiredKeys.required, ['type', 'relationships'])
+  t.deepEqual(requiredRelationships.properties.relationships.required, ['test-property'])
+})

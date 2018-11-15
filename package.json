@@ -1,6 +1,6 @@
 {
   "name": "open-json-api",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "",
   "main": "lib/open-json-api.js",
   "scripts": {

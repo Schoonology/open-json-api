@@ -243,3 +243,19 @@ test('getRelationships returns an array when a to-many relationship', t => {
     }
   })
 })
+
+test('getRelationships migrates relationshipId to relationships', t => {
+  var widget = {
+    companyId: 42
+  }
+  var subject = getRelationships(SPEC, 'Widget', widget)
+
+  t.deepEqual(subject, {
+    company: {
+      data: {
+        type: 'companies',
+        id: '42'
+      }
+    }
+  })
+})

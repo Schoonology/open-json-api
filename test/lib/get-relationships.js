@@ -24,6 +24,34 @@ var SPEC = {
         }
       }
     },
+    WidgetWithMetadata: {
+      properties: {
+        relationships: {
+          properties: {
+            company: {
+              properties: {
+                data: {
+                  allOf: [
+                    { $ref: '#/definitions/CompanyIdentifier' },
+                    {
+                      meta: {
+                        type: 'object',
+                        properties: {
+                          value: {
+                            type: 'string'
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     WidgetToMany: {
       properties: {
         relationships: {
@@ -101,6 +129,28 @@ test('getRelationships returns defined relationships from data', t => {
       data: {
         type: 'companies',
         id: '42'
+      }
+    }
+  })
+})
+
+test('getRelationships returns defined relationships from data with meta', t => {
+  var widget = {
+    company: {
+      id: 42,
+      value: 'foo'
+    }
+  }
+  var subject = getRelationships(SPEC, 'WidgetWithMetadata', widget)
+
+  t.deepEqual(subject, {
+    company: {
+      data: {
+        type: 'companies',
+        id: '42',
+        meta: {
+          value: 'foo'
+        }
       }
     }
   })

@@ -120,6 +120,30 @@ test('defineResource adds provided to-many relationships to the definition', t =
   )
 })
 
+test('defineResource adds provided to-one relationships to the definition with metadata', t => {
+  var subject = defineResource({}, 'Company', {
+    type: 'companies'
+  })
+  subject = defineResource(subject, 'Widget', {
+    type: 'widgets',
+    relationships: {
+      company: {
+        name: 'Company',
+        meta: {
+          value: {
+            type: 'string'
+          }
+        }
+      }
+    }
+  })
+
+  t.deepEqual(
+    getRelationships(subject, 'Widget', { company: { id: 42, value: 'foo' } }),
+    { company: { data: { type: 'companies', id: '42', meta: { value: 'foo' } } } }
+  )
+})
+
 test('defineResource adds a named resource identifier to the spec', t => {
   var subject = defineResource({}, 'Widget', {
     type: 'widgets'
